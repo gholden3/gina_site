@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: gina
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: gina
+  template:
+    metadata:
+      labels:
+        app: gina
+    spec:
+      containers:
+      - name: app
+        image: gholden3/gina-java
+        ports:
+        - containerPort: 8080
+        imagePullPolicy: Always
+
+
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: gina
+spec:
+  selector:
+    app: gina
+  ports:
+  - port: 80
+    targetPort: 8080
+  type: LoadBalancer
