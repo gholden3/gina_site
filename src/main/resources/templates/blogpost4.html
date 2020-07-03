@@ -1,0 +1,39 @@
+
+{{> header}}
+<a href="/">Home</a>
+<header>
+    <h1>Slack Message Clustering For Kubernetes Support Community</h1>
+    <p>Created:
+        <strong>June 30, 2020</strong></p>
+    <p>Last Modified: <strong>July 3, 2020</strong></p>
+</header>
+<div>An analysis of messages sent to '#velero' channel in kubernetes slack
+    with the goal of identifying any clustering and extracting FAQs.
+</div>
+
+<section>
+    <h2>Business impact</h2>
+    <p>The business stakeholder in this analysis is an open source engineering team called Velero. The engineers spend
+        a unscientific "good amount of time" every week answering questions from the community in slack. The initial
+        goal for this analysis is to see if there are any Frequently Asked Questions (FAQ's) that can be discerned
+    from the message data. The resultant FAQ's could be referenced by the community members who are answering questions
+    as a quick way to share information without repeating the same answer many times. It is hypothesized there could be a time
+    savings for the support engineers in this way. </p>
+    <h2>Data Preparation</h2>
+    <p>
+        The dataset is a slack message dump taken from kubernetes slack for a nine month period. There is one folder
+        corresponding to each channel and within each folder are several files, each one containing all of the messages
+        for that day. The data is in json format. I will not include technicalities of parsing the data here, only the
+        more interesting decisions relating to data cleaning.
+    </p>
+    <h3>Basic language cleanup</h3>
+    <h4>Removing Messages from team members</h4>
+    <p>As stated in the business impact section, the goal of this analysis is to find FAQ's from the product users. For
+    this reason, it is ok to remove messages from the engineering support team itself. In later steps, we are removing
+    messages that are only questions as well. So any questions from the engineering support team are more likely to be
+    clarifying questions for the user, for instance asking what version of the product they are running or asking if
+    they could run a command and post the output. This is not the types of questions we are looking for and will
+    at best create confusion in the data and at best create false clusters. </p>
+    <h3>Vectorization</h3>
+</section>
+{{> footer}}

@@ -1,20 +1,70 @@
 {{> header}}
 <h1>About</h1>
+Welcome. I'm a developer at VMware (formerly Pivotal Labs) and currently a MS student at NYU studying Data Science. <br>
+<br>
+
+This is a place to share data and computing related work. The goal is to provide ideas for readers
+in their own work as well as for me to learn from the engagement and ideas of others in this community. <br><br>
+
+This site is hosted on Amazon EKS using a docker image I created to run a Spring Boot application.
+I hope to eventually move all of my computing services off of Amazon because of their ethics as a company (look for more details in a future post :), but for now
+this is what we have.
+<br><br>
+Some of the code for posts can be found at my github: <a
+        href="https://github.com/gholden3">gholden3</a>. I plan on linking
+the github repository with each blog post, where possible. Unfortunately much of the code I discuss in posts is hosted in private repositories
+but I will attempt to pull out shareable
+chunks of usable code and share those on public github as I work on the blog posts. <br><br>
+I hope to build out more functionality on this site in the future, but for now enjoy the blog and feel free to get in
+touch: gina.m.holden
+<code>at</code> gmail.com (unless you are a recruiter from facebook or amazon in which case please do not
+email me).
 <h1>Blog</h1>
 
-<div>
-
-    {{#posts}}
     <section>
         <header>
-            <h2><a href="/post/{{id}}">{{title}}</a></h2>
-            <div> on <strong>{{createDate}}</strong></div>
+            <h2><a href="/post/4">Slack Message Clustering For Kubernetes Support Community</a>
+            </h2>
+            <p>Created:
+                <strong>June 30, 2020</strong></p>
+            <p>Last Modified: <strong>July 3, 2020</strong></p>
         </header>
-        <div>{{headline}}
+        <div>An analysis of messages sent to '#velero' channel in kubernetes slack
+            with the goal of identifying any clustering and extracting FAQs.
         </div>
     </section>
-    {{/posts}}
-</div>
+    <section>
+        <header>
+            <h2><a href="/post/3">Performing Alternating Least Sqares (ALS) Matrix Factorization on Goodreads Dataset</a></h2>
+            <p>Created: <strong>June 30, 2020</strong></p>
+            <p>Last Modified: <strong>June 30, 2020</strong></p>
+        </header>
+        <div>Uses pyspark's ALS engine to perform matrix factorization and latent factor calculations for users
+            and books in order to provide reading recommendations. Also includes visualization of latent factors
+            using TSNE dimensionality reduction.
+        </div>
+    </section>
+    <section>
+        <header>
+            <h2><a href="/post/2">Linear Regression to Predict Worldwide Refugee Counts</a>
+            </h2>
+            <p>Created: <strong>June 30, 2020</strong></p>
+            <p>Last Modified: <strong>June 30, 2020</strong></p>
+        </header>
+        <div>Uses various linear regression techniques against the UNHCR public refugee application count data
+            in order to predict the number of applicants per country per year.
+        </div>
+    </section
+    >
+    <section>
+        <header>
+            <h2><a href="/post/1">Matrix multiplication using Map Reduce</a></h2>
+            <p>Created: <strong>June 30, 2020</strong></p>
+            <p>Last Modified: <strong>June 30, 2020</strong></p>
+        </header>
+        <div>A python implementation of 2D matrix multiplication using Hadoop streaming (performed on a cluster provided to NYU students).
+        </div>
+    </section>
 
 
 {{> footer}}
