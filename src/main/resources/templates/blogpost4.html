@@ -20,6 +20,8 @@
         as a quick way to share information without repeating the same answer many times. It is hypothesized there could
         be a time
         savings for the support engineers in this way. </p>
+</section>
+<section>
     <h2>Data Preparation</h2>
     <p>
         The dataset is a slack message dump taken from kubernetes slack for a nine month period. There is one folder
@@ -50,7 +52,7 @@
     </p>
     <figure>
         <pre>
-    <code contenteditable spellcheck="false">
+    <code class="language-py" contenteditable spellcheck="false">
         import re
         import string
         self.text = self.text.replace("https://", "")
@@ -70,7 +72,7 @@
     </p>
     <figure>
         <pre>
-    <code contenteditable spellcheck="false">
+    <code class="language-py" contenteditable spellcheck="false">
     import nltk
     from nltk.stem import WordNetLemmatizer
     from nltk.corpus import wordnet
@@ -128,7 +130,7 @@
     </p>
     <figure>
         <pre>
-    <code contenteditable spellcheck="false">
+    <code class="language-py" contenteditable spellcheck="false">
         from sklearn.feature_extraction import text
         from sklearn.feature_extraction.text import CountVectorizer, TfidfVectorizer
         my_stop_words = ["velero", "backup", "hi", "hello", "hey", "use", "yeah"]
@@ -157,7 +159,7 @@
 
     <figure>
         <pre>
-    <code contenteditable spellcheck="false">
+    <code class="language-py" contenteditable spellcheck="false">
         self.tfidf_vectorizer = TfidfVectorizer(ngram_range=(1, 3),
                                                 stop_words=my_stop_words,
                                                 lowercase=True,
@@ -184,7 +186,7 @@
     1800 messages remaining. So by performing this series logic, we added 300 more rows to our dataset. <br>
     <figure>
         <pre>
-    <code contenteditable spellcheck="false">
+    <code  class="language-py"  contenteditable spellcheck="false">
     def combine_user_messages_short_time(self):
         window = datetime.timedelta(hours=4)
         series_by_username: DefaultDict[str, List[MessageSeries]] = defaultdict(list)
@@ -248,7 +250,7 @@
     </p>
     <figure>
         <pre>
-            <code contenteditable spellcheck="false">
+            <code class="language-py" contenteditable spellcheck="false">
         from sklearn.ensemble import GradientBoostingClassifier
         import nltk
         def train_dialogue_act_classifier(self):
@@ -280,5 +282,9 @@
             </code>
         </pre>
     </figure>
+</section>
+<section>
+<h2>Initial Data Exploration</h2>
+    <h3></h3>
 </section>
 {{> footer}}
