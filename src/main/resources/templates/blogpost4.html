@@ -50,16 +50,16 @@
         some signal, they were removed to start. <br>
         All punctuation was removed. <br>
     </p>
-    <figure>
+    <figure class="code-snippet-fig">
         <pre>
-    <code class="language-py" contenteditable spellcheck="false">
-        import re
-        import string
-        self.text = self.text.replace("https://", "")
-        self.text = self.text.replace("http://", "")
-        users_regex = re.compile(r"\<\@[A-Za-z\d]+\>")
-        self.text = re.sub(users_regex, "", self.text)
-        self.text = self.text.translate(str.maketrans('', '', string.punctuation))
+    <code class="language-py code-snippet" contenteditable spellcheck="false">
+    import re
+    import string
+    self.text = self.text.replace("https://", "")
+    self.text = self.text.replace("http://", "")
+    users_regex = re.compile(r"\<\@[A-Za-z\d]+\>")
+    self.text = re.sub(users_regex, "", self.text)
+    self.text = self.text.translate(str.maketrans('', '', string.punctuation))
     </code>
   </pre>
     </figure>
@@ -70,9 +70,9 @@
         real semantic meaning for some of the other cleaning steps. With stemming sometimes the roots come out and are
         not real words.
     </p>
-    <figure>
+    <figure class="code-snippet-fig">
         <pre>
-    <code class="language-py" contenteditable spellcheck="false">
+    <code class="language-py code-snippet" contenteditable spellcheck="false">
     import nltk
     from nltk.stem import WordNetLemmatizer
     from nltk.corpus import wordnet
@@ -128,19 +128,19 @@
         more than 70% of documents should be removed. This helps to remove commonality that does not provide any
         information.
     </p>
-    <figure>
+    <figure class="code-snippet-fig">
         <pre>
-    <code class="language-py" contenteditable spellcheck="false">
-        from sklearn.feature_extraction import text
-        from sklearn.feature_extraction.text import CountVectorizer, TfidfVectorizer
-        my_stop_words = ["velero", "backup", "hi", "hello", "hey", "use", "yeah"]
-        my_stop_words = text.ENGLISH_STOP_WORDS.union(my_stop_words)
-        count_vectorizer = CountVectorizer(ngram_range=(1, 3),
-                                                stop_words=my_stop_words,
-                                                lowercase=True,
-                                                min_df=3,
-                                                max_df=0.7,
-                                                analyzer='word')
+    <code class="language-py code-snippet" contenteditable spellcheck="false">
+    from sklearn.feature_extraction import text
+    from sklearn.feature_extraction.text import CountVectorizer, TfidfVectorizer
+    my_stop_words = ["velero", "backup", "hi", "hello", "hey", "use", "yeah"]
+    my_stop_words = text.ENGLISH_STOP_WORDS.union(my_stop_words)
+    count_vectorizer = CountVectorizer(ngram_range=(1, 3),
+                                            stop_words=my_stop_words,
+                                            lowercase=True,
+                                            min_df=3,
+                                            max_df=0.7,
+                                            analyzer='word')
     </code>
   </pre>
     </figure>
@@ -157,15 +157,15 @@
         data for some specific reason.
     </p>
 
-    <figure>
+    <figure class="code-snippet-fig">
         <pre>
-    <code class="language-py" contenteditable spellcheck="false">
-        self.tfidf_vectorizer = TfidfVectorizer(ngram_range=(1, 3),
-                                                stop_words=my_stop_words,
-                                                lowercase=True,
-                                                min_df=3,
-                                                max_df=0.7,
-                                                analyzer='word')
+    <code class="language-py code-snippet" contenteditable spellcheck="false">
+    self.tfidf_vectorizer = TfidfVectorizer(ngram_range=(1, 3),
+                                            stop_words=my_stop_words,
+                                            lowercase=True,
+                                            min_df=3,
+                                            max_df=0.7,
+                                            analyzer='word')
     </code>
   </pre>
     </figure>
@@ -184,9 +184,9 @@
     are
     a question, then the entire series is removed from the dataset. After adding in this grouping logic, there were
     1800 messages remaining. So by performing this series logic, we added 300 more rows to our dataset. <br>
-    <figure>
+    <figure class="code-snippet-fig">
         <pre>
-    <code  class="language-py"  contenteditable spellcheck="false">
+    <code  class="language-py code-snippet"  contenteditable spellcheck="false">
     def combine_user_messages_short_time(self):
         window = datetime.timedelta(hours=4)
         series_by_username: DefaultDict[str, List[MessageSeries]] = defaultdict(list)
@@ -248,9 +248,9 @@
         The model can be improved if we do train/test splits and cross-validation to tune the model. For now this
         is a first pass.
     </p>
-    <figure>
+    <figure class="code-snippet-fig">
         <pre>
-            <code class="language-py" contenteditable spellcheck="false">
+            <code class="language-py code-snippet" contenteditable spellcheck="false">
         from sklearn.ensemble import GradientBoostingClassifier
         import nltk
         def train_dialogue_act_classifier(self):
@@ -285,6 +285,47 @@
 </section>
 <section>
 <h2>Initial Data Exploration</h2>
-    <h3></h3>
+    <h3>Token Counts</h3>
+    <p>
+    List out the most popular tokens in the dataset. Interesting variation is to change binary=True
+    as a parameter to the count vectorizer. This tells the vectorizer to show only 0 or 1 showing if the
+     token is present or not in each document instead of the number of appearances. This shows highest
+        token count across all documents. </p>
+    <figure class="code-snippet-fig">
+        <pre>
+            <code class="language-py code-snippet" contenteditable spellcheck="false">
+        def perform_count_vectorization(self, df_to_vectorize):
+            df_count_vectorized = self.count_vectorizer.fit_transform(df_to_vectorize['message'])
+            self.arr_count = df_count_vectorized.toarray()
+
+        def perform_tfidf_vectorization(self, df_to_vectorize):
+
+            df_tfidf_vectorized = self.tfidf_vectorizer.fit_transform(df_to_vectorize['message'])
+            self.arr_tfidf = df_tfidf_vectorized.toarray()
+
+        analyzer.perform_count_vectorization(df_to_vectorize=analyzer.combined_messages)
+                feature_names = analyzer.count_vectorizer.get_feature_names()
+        sum_column = analyzer.arr_count.sum(axis=0)
+        count_df = pd.DataFrame({'feature_name':feature_names, 'count':sum_column})
+        print(count_df.sort_values(by=['count'], ascending=False).head(20))
+            </code>
+        </pre>
+    </figure>
+    <img class="toptokens ginaimg" src="/images/toptokens.png" alt="List of Top Tokens for Dataset">
+    <p>
+        Next we plot histograms to visualize the distribution of token counts
+    </p>
+    <figure class="code-snippet-fig">
+        <pre>
+            <code class="language-py code-snippet" contenteditable spellcheck="false">
+                plt.hist(np.log(sum_column))
+                plt.show()
+
+                plt.hist(sum_column)
+                plt.show()
+            </code>
+        </pre>
+    </figure>
+    <img class="toptokenshist ginaimg" src="/images/ngram_count_hist.png" alt="List of Top Tokens for Dataset">
 </section>
 {{> footer}}
