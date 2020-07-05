@@ -4,7 +4,7 @@
     <h1>Slack Message Clustering For Kubernetes Support Community</h1>
     <p>Created:
         <strong>June 30, 2020</strong></p>
-    <p>Last Modified: <strong>July 3, 2020</strong></p>
+    <p>Last Modified: <strong>July 5, 2020</strong></p>
 </header>
 <div>An analysis of messages sent to '#velero' channel in kubernetes slack
     with the goal of identifying any clustering and extracting FAQs.
@@ -326,6 +326,27 @@
             </code>
         </pre>
     </figure>
-    <img class="toptokenshist ginaimg" src="/images/ngram_count_hist.png" alt="List of Top Tokens for Dataset">
+    <img class="toptokenshist ginaimg" src="/images/ngram_count_hist.png" alt="Token Count Histogram">
+    <p>
+        Another common way to visualize common tokens is using a wordcloud. Token size corresponds to count.
+    </p>
+    <figure class="code-snippet-fig">
+        <pre>
+            <code class="language-py code-snippet" contenteditable spellcheck="false">
+            text = " ".join(message for message in analyzer.combined_messages.message)
+            from wordcloud import WordCloud, STOPWORDS, ImageColorGenerator
+            stopwords = set(STOPWORDS)
+            stopwords.update(["velero", "backup", "hi", "hello", "hey", "use", "yeah"])
+            wordcloud = WordCloud(max_font_size=40,
+                                  max_words=80,
+                                  background_color="white",
+                                 stopwords=stopwords).generate(text)
+            plt.imshow(wordcloud, interpolation='bilinear')
+            plt.axis("off")
+            plt.show()
+            </code>
+        </pre>
+    </figure>
+    <img class="wordcloud ginaimg" src="/images/velero_wordcloud.png" alt="Token Count Wordcloud">
 </section>
 {{> footer}}

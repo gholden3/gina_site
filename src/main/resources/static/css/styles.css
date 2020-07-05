@@ -22,6 +22,10 @@ a:visited {
     width: 50%;
 }
 
+.wordcloud {
+    width: 70%;
+}
+
 .code-snippet-fig{
     width: 80%;
     height: auto;
