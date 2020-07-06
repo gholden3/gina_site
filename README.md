@@ -6,8 +6,8 @@ using docker:
 ```docker run -p 8080:8080 gholden3/gina-java```
 
 ## building and tagging a new image
-```./gradlew build && java -jar build/libs/gs-spring-boot-docker-0.1.0.jar```
-```docker build --build-arg JAR_FILE="build/libs/gina-0.1.0.jar" -t gholden3/gina-java:1.0.1 -t gholden3/gina-java:latest .```
+```./gradlew build && java -jar build/libs/gs-spring-boot-docker-0.1.1.jar```
+```docker build --build-arg JAR_FILE="build/libs/gina-0.1.1.jar" -t gholden3/gina-java:0.1.1 -t gholden3/gina-java:latest .```
 
 ## push the new image to dockerhub
 ```docker push gholden3/gina-java:latest```
