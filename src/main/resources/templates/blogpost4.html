@@ -4,27 +4,36 @@
     <h1>Slack Message Clustering For Kubernetes Support Community</h1>
     <p>Created:
         <strong>June 30, 2020</strong></p>
-    <p>Last Modified: <strong>July 5, 2020</strong></p>
+    <p>Last Modified: <strong>July 6, 2020</strong></p>
 </header>
 <div>An analysis of messages sent to '#velero' channel in kubernetes slack
     with the goal of identifying any clustering and extracting FAQs.
 </div>
 
 <section>
-    <h2>Business impact</h2>
+    <h2>Business Impact</h2>
     <p>The business stakeholder in this analysis is an open source engineering team called Velero. The engineers spend
         a unscientific "good amount of time" every week answering questions from the community in slack. The initial
         goal for this analysis is to see if there are any Frequently Asked Questions (FAQ's) that can be discerned
         from the message data. The resultant FAQ's could be referenced by the community members who are answering
         questions
-        as a quick way to share information without repeating the same answer many times. It is hypothesized there could
-        be a time
-        savings for the support engineers in this way. </p>
+        as a quick way to share information without repeating the same answer many times. It is hypothesized this could
+        result in a time savings for support engineers.</p>
+</section>
+
+<section>
+    <h2>Community Impact</h2>
+    <p>Creating a FAQ document would help improve consistency in support messaging, ensuring that similar questions
+        are answered with similar guidance. Additionally, if engineers working on the team spend less time answering
+        common questions, they could spend more time and give more consideration to investigating unfamiliar problems
+        posed by users.
+    </p>
 </section>
 <section>
     <h2>Data Preparation</h2>
     <p>
-        The dataset is a slack message dump taken from kubernetes slack for a nine month period. There is one folder
+        This dataset is a collection of messages in the public #velero channel taken from the Kubernetes Slack
+        for a nine month period between July 31, 2019 and April 20, 2020. There is one folder
         corresponding to each channel and within each folder are several files, each one containing all of the messages
         for that day. The data is in json format. I will not include technicalities of parsing the data here, only the
         more interesting decisions relating to data cleaning.
@@ -436,8 +445,191 @@
         Even though the math tells us our clusters aren't adding any meaning, we still may want to plot them and
         visualize them to get an idea for what they look like. Since the input data is so highly dimensional, we use a
         dimensionality reduction technique to plot the data in 2 dimensions. There are a few popular tools for this,
-        here we tried TSNE and PCA. 
+        here we tried TSNE and PCA.
     </p>
+    <h4>
+        TSNE Plotting
+    </h4>
+    <p>
+        There's probably a more clever way to specify the colors for TNSE plots but here I pass in the observations with
+        full dimensionality as well as their labels from kmeans clustering. TSNE will perform the dimensionality
+        reduction
+        and color the points to represent their kmeans cluster.
+    </p>
+    <p>
+        Several TSNEs were plotted using varying combinations of ngrams and k values. Only one plot is shown below
+        because
+        as a whole, the plots did not show anything. They showed a relatively normal distribution with no recognizable
+        communities forming. For comparison sake, below the plot that was created there is an example TSNE which I
+        created
+        using the "goodreads" dataset of users and books they have read. Here you can see some communities forming and
+        clustering
+        of data points.
+    </p>
+    <figure class="code-snippet-fig horizontal-center">
+    <pre>
+            <code class="language-py code-snippet" contenteditable spellcheck="false">
+            class TSNEPlotter:
+                def __init__(self):
+                    colorsarr = ['red',
+                     'black',
+                     'gold',
+                     'darkgreen',
+                     'darkorchid',
+                     'thistle',
+                     'teal',
+                     'dodgerblue',
+                     'lime',
+                     'silver',
+                     'hotpink',
+                     'navy',
+                     'greenyellow',
+                     'chocolate',
+                     'seagreen',
+                     'fuchsia',
+                     'salmon',
+                     'blueviolet',
+                     'orange',
+                     'firebrick',
+                     'yellow']
+
+                    self.rgba_colors = list(map(colors.to_rgba, colorsarr))
+
+                    self.legend_elements = [
+                    Line2D([0], [0], marker='o', color='w', label='0', markerfacecolor=self.rgba_colors[0], markersize=10),
+                    Line2D([0], [0], marker='o', color='w', label='1', markerfacecolor=self.rgba_colors[1], markersize=10),
+                    Line2D([0], [0], marker='o', color='w', label='2', markerfacecolor=self.rgba_colors[2], markersize=10),
+                    Line2D([0], [0], marker='o', color='w', label='3', markerfacecolor=self.rgba_colors[3], markersize=10),
+                    Line2D([0], [0], marker='o', color='w', label='4', markerfacecolor=self.rgba_colors[4], markersize=10),
+                    Line2D([0], [0], marker='o', color='w', label='5', markerfacecolor=self.rgba_colors[5], markersize=10),
+                    Line2D([0], [0], marker='o', color='w', label='6', markerfacecolor=self.rgba_colors[6], markersize=10),
+                    Line2D([0], [0], marker='o', color='w', label='7', markerfacecolor=self.rgba_colors[7], markersize=10),
+                    Line2D([0], [0], marker='o', color='w', label='8', markerfacecolor=self.rgba_colors[8], markersize=10),
+                    Line2D([0], [0], marker='o', color='w', label='9', markerfacecolor=self.rgba_colors[9], markersize=10),
+                    Line2D([0], [0], marker='o', color='w', label='10', markerfacecolor=self.rgba_colors[10], markersize=10),
+                    Line2D([0], [0], marker='o', color='w', label='11', markerfacecolor=self.rgba_colors[11], markersize=10),
+                    Line2D([0], [0], marker='o', color='w', label='12', markerfacecolor=self.rgba_colors[12], markersize=10),
+                    Line2D([0], [0], marker='o', color='w', label='13', markerfacecolor=self.rgba_colors[13], markersize=10),
+                    Line2D([0], [0], marker='o', color='w', label='14', markerfacecolor=self.rgba_colors[14], markersize=10),
+                    Line2D([0], [0], marker='o', color='w', label='15', markerfacecolor=self.rgba_colors[15], markersize=10),
+                    Line2D([0], [0], marker='o', color='w', label='16', markerfacecolor=self.rgba_colors[16], markersize=10),
+                    Line2D([0], [0], marker='o', color='w', label='17', markerfacecolor=self.rgba_colors[17], markersize=10),
+                    Line2D([0], [0], marker='o', color='w', label='18', markerfacecolor=self.rgba_colors[18], markersize=10),
+                    Line2D([0], [0], marker='o', color='w', label='19', markerfacecolor=self.rgba_colors[19], markersize=10)]
+
+
+                def plot_tsne(self, input_data, labels):
+                    plt.figure()
+                    x_embedded = TSNE(n_components=2).fit_transform(input_data)
+                    x_coords = x_embedded[:, 0]
+                    y_coords = x_embedded[:, 1]
+                    #optional for plotting in 3D
+                    # z_coords = x_embedded[:, 2]
+
+                    plt.scatter(x_coords, y_coords, label=labels, color=np.array(self.rgba_colors)[labels])
+                    plt.legend(handles=self.legend_elements, title="kmeanscluster", fancybox=True, bbox_to_anchor=(0, .9))
+                    plt.show()
+            TSNEPlotter().plot_tsne(analyzer.arr_tfidf, analyzer.kmeans_data_labels)
+
+            # optional: for plotting 3D tsne
+            #%matplotlib qt
+            #fig = plt.figure()
+            #from mpl_toolkits.mplot3d import Axes3D
+
+            #ax = fig.add_subplot(111, projection='3d')
+            #ax.scatter(x_coords, y_coords, z_coords, color=np.array(rgba_colors)[labels])
+            #plt.show()
+            </code>
+        </pre>
+    </figure>
+    <figure>
+        <img class="fiftypctwidth horizontal-center" src="/images/slacktsne.png" alt="TSNE of kmeans clustering">
+        <figcaption class="horizontal-center fiftypctwidth">TSNE Plot of Kmeans using k=20 and TF/IDF with ngrams 1-2
+        </figcaption>
+    </figure>
+    <figure>
+        <img class="fiftypctwidth horizontal-center" src="/images/goodreadstsne.png"
+             alt="TSNE of kmeans clustering for goodreads dataset">
+        <figcaption class="horizontal-center fiftypctwidth">For comparison, this is what a TSNE plot looks like when
+            there are
+            clusters and communities forming. This is from a dataset I analyzed from goodreads.
+        </figcaption>
+    </figure>
+    <h4>
+        PCA Plotting
+    </h4>
+    <p>
+        PCA plot also doesn't tell us much but it uses different techniques for dimensionality reduction than TSNE
+        so it is usually interesting to try it in addition to TSNE.
+    </p>
+    <figure class="code-snippet-fig horizontal-center">
+    <pre>
+            <code class="language-py code-snippet" contenteditable spellcheck="false">
+                centers = np.array(analyzer.kmeans_model.cluster_centers_)
+                labels = analyzer.kmeans_model.labels_
+
+                def plot_pca(observations, centers):
+                    random_state = 0
+                    pca = PCA(n_components=2, random_state=random_state)
+                    reduced_features = pca.fit_transform(observations)
+                    reduced_cluster_centers = pca.transform(centers)
+
+                    plt.figure(figsize=(8, 6))
+                    plt.scatter(reduced_features[:,0], reduced_features[:,1], c=y_km)
+                    plt.scatter(reduced_cluster_centers[:, 0], reduced_cluster_centers[:,1], marker='x', s=150, c='b')
+                    plt.show()
+            </code>
+    </pre>
+    </figure>
+    <figure>
+        <img class="fiftypctwidth horizontal-center" src="/images/pca.png"
+             alt="PCA plot for slack data">
+        <figcaption class="horizontal-center fiftypctwidth">PCA plot for slack data
+        </figcaption>
+    </figure>
+    <h4>
+        Manual Cluster inspection
+    </h4>
+    <p>
+        To get a feel for the messages in each cluster, find the top few messages that are closest to the centroid of
+        each cluster and export them to a csv file where we can read the messages and get a feel for how much meaning
+        each cluster holds.
+    </p>
+    <figure class="code-snippet-fig horizontal-center">
+    <pre>
+            <code class="language-py code-snippet" contenteditable spellcheck="false">
+                def get_distances_for_each_observation(cluster_centers, observations, labels):
+                    # for each question find distance to centroid
+                    pd.set_option('display.max_colwidth', None)
+                    distances = []
+                    for idx, observation in enumerate(observations):
+                        center = centers[labels[idx]]
+                        dist = euclidean(observation, center)
+                        distances = distances + [dist]
+                    return distances
+
+                def write_top_qs_for_each_cluster(distances, original_df, labels, filename):
+                    # add cluster labels and distance columns to each observation
+                    df_with_clusters = original_df
+                    df_with_clusters["cluster"] = labels
+                    df_with_clusters["distance"] = distances
+                    #  for each cluster, get the three observations closest to the centroid
+                    grouped = df_with_clusters.groupby(by="cluster")["distance"].nlargest(3)
+                    new_groups = grouped.to_frame(name = 'mean').reset_index()
+                    print(new_groups.shape)
+                    indeces = new_groups["level_1"].values
+                    print(original_df.shape)
+                    new_groups["question"] = original_df.iloc[indeces, 1].values
+                    print(new_groups.head())
+                    filename = filename + ".csv"
+                    new_groups.to_csv(filename)
+
+                distances = get_distances_for_each_observation(centers, analyzer.arr_tfidf, labels)
+                write_top_qs_for_each_cluster(distances, analyzer.message_df, labels, "plain20kmeanstfidf1-2ngrams")
+
+            </code></pre>
+    </figure>
+
     <h3>Topic Modeling</h3>
     <p>
         In order to reduce the dimensionality of the data while keeping the important meaning, topic modeling was
