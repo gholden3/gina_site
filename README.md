@@ -16,5 +16,5 @@ using docker:
 kubectl rollout restart deployment/gina
 
 ## Prod
-http://a4bccf68fc7664a06a1976f08f048e8d-1538739663.us-west-2.elb.amazonaws.com/
+http://a92d6f56fe0d84f388543e8d7c6a6b27-456164866.us-west-2.elb.amazonaws.com/
 
