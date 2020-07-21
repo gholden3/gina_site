@@ -59,7 +59,7 @@
         some signal, they were removed to start. <br>
         All punctuation was removed. <br>
     </p>
-    <figure class="code-snippet-fig horizontal-center">
+    <figure class="eightypctwidth horizontal-center">
         <pre>
     <code class="language-py code-snippet" contenteditable spellcheck="false">
     import re
@@ -79,7 +79,7 @@
         real semantic meaning for some of the other cleaning steps. With stemming sometimes the roots come out and are
         not real words.
     </p>
-    <figure class="code-snippet-fig horizontal-center">
+    <figure class="eightypctwidth horizontal-center">
         <pre>
     <code class="language-py code-snippet" contenteditable spellcheck="false">
     import nltk
@@ -137,7 +137,7 @@
         more than 70% of documents should be removed. This helps to remove commonality that does not provide any
         information.
     </p>
-    <figure class="code-snippet-fig horizontal-center">
+    <figure class="eightypctwidth horizontal-center">
         <pre>
     <code class="language-py code-snippet" contenteditable spellcheck="false">
     from sklearn.feature_extraction import text
@@ -166,7 +166,7 @@
         data for some specific reason.
     </p>
 
-    <figure class="code-snippet-fig horizontal-center">
+    <figure class="eightypctwidth horizontal-center">
         <pre>
     <code class="language-py code-snippet" contenteditable spellcheck="false">
     self.tfidf_vectorizer = TfidfVectorizer(ngram_range=(1, 3),
@@ -193,7 +193,7 @@
     are
     a question, then the entire series is removed from the dataset. After adding in this grouping logic, there were
     1800 messages remaining. So by performing this series logic, we added 300 more rows to our dataset. <br>
-    <figure class="code-snippet-fig horizontal-center">
+    <figure class="eightypctwidth horizontal-center">
         <pre>
     <code class="language-py code-snippet" contenteditable spellcheck="false">
     def combine_user_messages_short_time(self):
@@ -257,7 +257,7 @@
         The model can be improved if we do train/test splits and cross-validation to tune the model. For now this
         is a first pass.
     </p>
-    <figure class="code-snippet-fig horizontal-center">
+    <figure class="eightypctwidth horizontal-center">
         <pre>
             <code class="language-py code-snippet" contenteditable spellcheck="false">
         from sklearn.ensemble import GradientBoostingClassifier
@@ -300,7 +300,7 @@
         as a parameter to the count vectorizer. This tells the vectorizer to show only 0 or 1 showing if the
         token is present or not in each document instead of the number of appearances. This shows highest
         token count across all documents. </p>
-    <figure class="code-snippet-fig horizontal-center">
+    <figure class="eightypctwidth horizontal-center">
         <pre>
             <code class="language-py code-snippet" contenteditable spellcheck="false">
         def perform_count_vectorization(self, df_to_vectorize):
@@ -324,7 +324,7 @@
     <p>
         Next we plot histograms to visualize the distribution of token counts
     </p>
-    <figure class="code-snippet-fig horizontal-center">
+    <figure class="eightypctwidth horizontal-center">
         <pre>
             <code class="language-py code-snippet" contenteditable spellcheck="false">
                 plt.hist(np.log(sum_column))
@@ -339,7 +339,7 @@
     <p>
         Another common way to visualize common tokens is using a wordcloud. Token size corresponds to count.
     </p>
-    <figure class="code-snippet-fig horizontal-center">
+    <figure class="eightypctwidth horizontal-center">
         <pre>
             <code class="language-py code-snippet" contenteditable spellcheck="false">
             text = " ".join(message for message in analyzer.combined_messages.message)
@@ -408,7 +408,7 @@
         all
         the different dimensions. Our tf/idf data has around 1000 features.
     </p>
-    <figure class="code-snippet-fig horizontal-center">
+    <figure class="eightypctwidth horizontal-center">
         <pre>
             <code class="language-py code-snippet" contenteditable spellcheck="false">
             def create_and_fit_kmeans_tfidf(self, num_clusters=10):
@@ -466,7 +466,7 @@
         clustering
         of data points.
     </p>
-    <figure class="code-snippet-fig horizontal-center">
+    <figure class="eightypctwidth horizontal-center">
     <pre>
             <code class="language-py code-snippet" contenteditable spellcheck="false">
             class TSNEPlotter:
@@ -562,7 +562,7 @@
         PCA plot also doesn't tell us much but it uses different techniques for dimensionality reduction than TSNE
         so it is usually interesting to try it in addition to TSNE.
     </p>
-    <figure class="code-snippet-fig horizontal-center">
+    <figure class="eightypctwidth horizontal-center">
     <pre>
             <code class="language-py code-snippet" contenteditable spellcheck="false">
                 centers = np.array(analyzer.kmeans_model.cluster_centers_)
@@ -595,7 +595,7 @@
         each cluster and export them to a csv file where we can read the messages and get a feel for how much meaning
         each cluster holds.
     </p>
-    <figure class="code-snippet-fig horizontal-center">
+    <figure class="eightypctwidth horizontal-center">
     <pre>
             <code class="language-py code-snippet" contenteditable spellcheck="false">
                 def get_distances_for_each_observation(cluster_centers, observations, labels):
@@ -633,7 +633,231 @@
     <h3>Topic Modeling</h3>
     <p>
         In order to reduce the dimensionality of the data while keeping the important meaning, topic modeling was
-        explored.
+        explored. There are many ways to do this but shown here are a cursory analysis with Latent Dirichlet Allocation
+        (LDA) and Non-Negative Matrix Factorization. As the name implies, NMF uses matrix factorization to find the
+        latent
+        topics. LDA uses probabilistic inference to determine which words belong in which topic. Both algorithms are
+        given
+        a set number of topics to extract. As I will show, this number can be tuned to find the "right" number of
+        topics.
     </p>
+    <h4>NMF Topic Modeling</h4>
+    <p>Future work here could be to try to grid search and tune the number of clusters for NMF.</p>
+    <figure class="eightypctwidth horizontal-center">
+    <pre>
+            <code class="language-py code-snippet" contenteditable spellcheck="false">
+            def display_topics(model, feature_names, no_top_words):
+                for topic_idx, topic in enumerate(model.components_):
+                    print(f"Topic {topic_idx}:")
+                    print(" ".join([feature_names[i]
+                    for i in topic.argsort()[:-no_top_words - 1:-1]]))
+
+            num_topics = 20
+            num_words = 10
+            nmf = NMF(n_components=num_topics, random_state=0).fit(arr_tfidf)
+            display_topics(nmf, tfidf_vectorizer.get_feature_names(), num_words)
+
+                Topic 0:
+                use storage object use restic s3 use case case command use provider command
+                Topic 1:
+                restore cluster try new restore cluster pvc try restore cluster restore different cluster cluster
+                Topic 2:
+                just need plugin make change plugins resource csi run image
+                Topic 3:
+                log restore log log restore kubectl log provide pod log send fail server restore
+                Topic 4:
+                issue thanks github open file open issue resolve repo github issue able
+                Topic 5:
+                restic use restic file run server restic server cloud support image restic pod
+                Topic 6:
+                error fail help location error occur occur invalid unknown code error code
+                Topic 7:
+                pod wch annotate run restart pvc try annotate pod restic pod annotation
+                Topic 8:
+                work yes maybe pr whats fix know work right client know work
+                Topic 9:
+                look like look like sometng field secret specific kind bucket storage
+                Topic 10:
+                volume persistent persistent volume volume snapshot nfs create store include eb volume csi
+                Topic 11:
+                snapshot pv delete mean azure want volume snapshot disk create group
+                Topic 12:
+                meeting add community want hackmdiojq6f5zqzr7s80cedwuklkaview meetingopen discussion community meetingopen discussion discussion community meetingopen meetingopen
+                Topic 13:
+                tnk merge pr approach schedule great dont really check make
+                Topic 14:
+                version version use output kubernetes server run happen server version k8s version v120
+                Topic 15:
+                way way specify way install example specify thanks best way s3 best bucket
+                Topic 16:
+                right set different default work right restores correct aws register mean
+                Topic 17:
+                possible namespace schedule create label ttl possible restore change file resource
+                Topic 18:
+                kubectl output yaml provide share share output deployment provide output return snapshotlocation
+                Topic 19:
+                install helm chart helm chart flag deployment use helm try set provider
+            </code></pre>
+    </figure>
+    <h4>LDA Topic Modeling</h4>
+    <p>For LDA we use the count vectorizer instead of tf/idf because LDA uses probability and a wordcount that is not an
+        integer does not make sense as an input. </p>
+    <figure class="eightypctwidth horizontal-center">
+    <pre>
+            <code class="language-py code-snippet" contenteditable spellcheck="false">
+                feature_names = analyzer.count_vectorizer.get_feature_names()
+                display_topics(lda, feature_names, num_words)
+
+                Topic 0:
+                date kind deployment metadata image volume label container info selector
+                Topic 1:
+                new create delete create new group resource group pod azure status resource
+                Topic 2:
+                restore miss did new cluster cluster log new today need log did miss
+                Topic 3:
+                restore cluster reading kubectl pvc original did deployment miss age
+                Topic 4:
+                110gt list prior 110gt resource list prior prior 110gt prior list prior ext4 plugins type ext4 plugins type type ext4
+                Topic 5:
+                list really resource documentation log pod flag add resource list bucket
+                Topic 6:
+                support annotation isn debug turn possible new restore restore like deployment
+                Topic 7:
+                single restore namespace need node object cluster include fix label
+                Topic 8:
+                need bucket provider cluster image install tag test plugin k8s
+                Topic 9:
+                add community talk able whats happen meeting likely sure whats provide
+                Topic 10:
+                whats work base issue make best whats best list data error
+                Topic 11:
+                csi big need plugins snapshot flag helm isn make plugin
+                Topic 12:
+                need volume restic whats create im snapshot file im sure add
+                Topic 13:
+                server type way namespace label selector resource yeah volume create retain
+                Topic 14:
+                type kubernetes manifest log pod service like plugin namespace list
+                Topic 15:
+                chance suppose anybody age kubectl k8s node restore install command
+                Topic 16:
+                did long isn default run delete restic aren install annotate
+                Topic 17:
+                pod did set annotate did annotate minio phase mount type value
+                Topic 18:
+                pvs namespaces restic resource label list resource list phase namespace label selector
+                Topic 19:
+                resource list crd disk disk snapshot secret download snapshot dont volume
+            </code></pre>
+    </figure>
+    <p>
+        We use log likelihood to tune the number of clusters. Future work here could be to try to tune the number of
+        words in each cluster or evaluate with a different metric, such as perplexity. For this analysis, since we have
+        seen no evidence that any number of clusters gives any significant meaning above randomness, the investment in
+        further analysis was not pursued. After fitting the grid search, we print out some basic statistics about the
+        best model. It is not promising that the best performing number of clusters is found to be one. This means there is
+        no clustering of words that provides more meaning than just grouping everything together.
+    </p>
+    <figure class="eightypctwidth horizontal-center">
+    <pre>
+            <code class="language-py code-snippet" contenteditable spellcheck="false">
+            search_params = {'n_components': [1, 3,  5, 7, 10, 12,  15, 20, 30, 40, 50, 60, 70, 100]}
+
+            lda = LatentDirichletAllocation()
+
+            # Init Grid Search Class
+            model = GridSearchCV(lda, param_grid=search_params)
+
+            # Do the Grid Search
+            model.fit(analyzer.arr_count)
+
+            # Best Model
+            best_lda_model = model.best_estimator_
+
+            # Model Parameters
+            print("Best Model's Params: ", model.best_params_)
+
+            # Log Likelihood Score
+            print("Best Log Likelihood Score: ", model.best_score_)
+
+            # Perplexity
+            print("Model Perplexity: ", best_lda_model.perplexity(arr_count))
+
+                Best Model's Params:  {'learning_decay': 0.5, 'n_components': 1}
+                Best Log Likelihood Score:  -27530.954489422358
+                Model Perplexity:  791.3824848857677
+            </code>
+    </pre>
+    </figure>
+    <p> In order to convince ourselves, let us plot the log likelihood values from the grid search. We notice from the
+    graph that indeed the best number of clusters to create is one. This suggests there is no clustering.</p>
+    <figure class="eightypctwidth horizontal-center">
+    <pre>
+            <code class="language-py code-snippet" contenteditable spellcheck="false">
+            n_topics = [1, 3,  5, 7, 10, 12,  15, 20, 30, 40, 50, 60, 70, 100]
+
+            def plot_grid_search(cv_results, grid_param_1, name_param_1):
+                # Get Test Scores Mean and std for each grid search
+                scores_mean = cv_results['mean_test_score']
+                scores_mean = np.array(scores_mean).reshape(len(grid_param_1))
+
+                scores_sd = cv_results['std_test_score']
+                scores_sd = np.array(scores_sd).reshape(len(grid_param_1))
+
+                # Plot Grid search scores
+                _, ax = plt.subplots(1,1)
+
+                ax.plot(grid_param_1, scores_mean, '-o')
+
+                ax.set_title("Grid Search Scores", fontsize=20, fontweight='bold')
+                ax.set_xlabel(name_param_1, fontsize=16)
+                ax.set_ylabel('CV Average Score', fontsize=16)
+                ax.grid('on')
+
+            plot_grid_search(model.cv_results_, n_topics,  'N Topics')
+            </code>
+    </pre>
+    </figure>
+    <figure>
+        <img class="fiftypctwidth horizontal-center" src="/images/ntopicsgridsearchlda.png" alt="LDA topics search">
+    </figure>
+    <p>We can also output the document/probability matrix calculated from the lda. This tells us the probability that
+    each document (message) belongs to each topic.</p>
+    <figure class="eightypctwidth horizontal-center">
+    <pre>
+            <code class="language-py code-snippet" contenteditable spellcheck="false">
+            # create document x topic probability matrix
+            lda_output = lda.transform(analyzer.arr_count)
+            topicnames = ["Topic" + str(i) for i in range(num_topics)]
+            docnames = ["Doc" + str(i) for i in range(len(analyzer.message_df))]
+            df_document_topic = pd.DataFrame(np.round(lda_output, 5), columns=topicnames, index=docnames)
+            # Get dominant topic for each document
+            dominant_topic = np.argmax(df_document_topic.values, axis=1)
+            df_document_topic['dominant_topic'] = dominant_topic
+
+            def color_green(val):
+                color = 'green' if val > .1 else 'black'
+                return 'color: {col}'.format(col=color)
+
+            def make_bold(val):
+                weight = 700 if val > .1 else 400
+                return 'font-weight: {weight}'.format(weight=weight)
+
+            # Apply Style
+            df_document_topics = df_document_topic.head(15).style.applymap(color_green).applymap(make_bold)
+                        </code>
+    </pre>
+    </figure>
+    <figure>
+        <img class="eightypctwidth horizontal-center" src="/images/topicprobabilitymatrix.png" alt="Topic Probability Matrix">
+        <figcaption class="horizontal-center fiftypctwidth">Topic Probability Matrix</figcaption>
+    </figure>
+</section>
+<section>
+    <h2>Conclusions</h2>
+    <p>Since none of our analysis showed any signs that there were any useful clusterings of messages, no further analysis
+    into clustering was pursued. The team decided that as far as slack message analytics go, the next route to pursue
+    may be a more metrics based analysis. For instance, displaying the most popular words in slack over a five day window,
+    or counting the number of unique users asking questions over a few day window. </p>
 </section>
 {{> footer}}
