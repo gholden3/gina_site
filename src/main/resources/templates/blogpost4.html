@@ -4,7 +4,7 @@
     <h1>Slack Message Clustering For Kubernetes Support Community</h1>
     <p>Created:
         <strong>June 30, 2020</strong></p>
-    <p>Last Modified: <strong>July 12, 2020</strong></p>
+    <p>Last Modified: <strong>July 21, 2020</strong></p>
 </header>
 <div>An analysis of messages sent to '#velero' channel in kubernetes slack
     with the goal of identifying any clustering and extracting FAQs.
@@ -755,7 +755,8 @@
         words in each cluster or evaluate with a different metric, such as perplexity. For this analysis, since we have
         seen no evidence that any number of clusters gives any significant meaning above randomness, the investment in
         further analysis was not pursued. After fitting the grid search, we print out some basic statistics about the
-        best model. It is not promising that the best performing number of clusters is found to be one. This means there is
+        best model. It is not promising that the best performing number of clusters is found to be one. This means there
+        is
         no clustering of words that provides more meaning than just grouping everything together.
     </p>
     <figure class="eightypctwidth horizontal-center">
@@ -790,7 +791,7 @@
     </pre>
     </figure>
     <p> In order to convince ourselves, let us plot the log likelihood values from the grid search. We notice from the
-    graph that indeed the best number of clusters to create is one. This suggests there is no clustering.</p>
+        graph that indeed the best number of clusters to create is one. This suggests there is no clustering.</p>
     <figure class="eightypctwidth horizontal-center">
     <pre>
             <code class="language-py code-snippet" contenteditable spellcheck="false">
@@ -822,7 +823,7 @@
         <img class="fiftypctwidth horizontal-center" src="/images/ntopicsgridsearchlda.png" alt="LDA topics search">
     </figure>
     <p>We can also output the document/probability matrix calculated from the lda. This tells us the probability that
-    each document (message) belongs to each topic.</p>
+        each document (message) belongs to each topic.</p>
     <figure class="eightypctwidth horizontal-center">
     <pre>
             <code class="language-py code-snippet" contenteditable spellcheck="false">
@@ -849,15 +850,20 @@
     </pre>
     </figure>
     <figure>
-        <img class="eightypctwidth horizontal-center" src="/images/topicprobabilitymatrix.png" alt="Topic Probability Matrix">
-        <figcaption class="horizontal-center fiftypctwidth">Topic Probability Matrix</figcaption>
+        <img class="eightypctwidth horizontal-center" src="/images/topicprobabilitymatrix.png"
+             alt="Topic Probability Matrix">
     </figure>
 </section>
 <section>
     <h2>Conclusions</h2>
-    <p>Since none of our analysis showed any signs that there were any useful clusterings of messages, no further analysis
-    into clustering was pursued. The team decided that as far as slack message analytics go, the next route to pursue
-    may be a more metrics based analysis. For instance, displaying the most popular words in slack over a five day window,
-    or counting the number of unique users asking questions over a few day window. </p>
+    <p>Since none of our analysis showed any signs that there were any useful clusterings of messages, no further
+        analysis
+        into clustering was pursued. The team decided that as far as slack message analytics go, the next route to
+        pursue
+        may be a more metrics based analysis. For instance, displaying the most popular words in slack over a five day
+        window,
+        or counting the number of unique users asking questions over a few day window. These metrics could further the
+        team's
+        goal to understand what problems the community is facing in using the product. </p>
 </section>
 {{> footer}}
