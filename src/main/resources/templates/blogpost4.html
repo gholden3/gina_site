@@ -6,15 +6,25 @@
         <strong>June 30, 2020</strong></p>
     <p>Last Modified: <strong>July 21, 2020</strong></p>
 </header>
-<div>An analysis of messages sent to '#velero' channel in kubernetes slack
-    with the goal of identifying any clustering and extracting FAQs.
-</div>
-
 <section>
-    <h2>Business Impact</h2>
-    <p>The business stakeholder in this analysis is an open source engineering team called Velero. The engineers spend
-        a unscientific "good amount of time" every week answering questions from the community in slack. The initial
-        goal for this analysis is to see if there are any Frequently Asked Questions (FAQ's) that can be discerned
+    <h2>Summary of Approach and Findings</h2>
+    <p>
+        To help better serve the Velero community, we analyzed the #velero channel in Kubernetes
+        Slack to create a "FAQ" document. We employed several tokenizing methods as well as topic modeling
+         in order to try to cluster the messages from the Slack channel. Ultimately, we did not find any evidence
+        of significant clustering of FAQs but we share the analysis here in hopes that others will find the approach useful
+        or at the very least interesting :) <br><br>
+        This article will be especially interesting to anyone who is interested in
+        employing topic modeling to extract clusters of text from a dataset. An attempt was made to supply enough code snippets
+        and detail for a data scientist to get a full analysis working using this article as a reference, while also providing
+        enough explanation for folks without a text processing background to understand the project.
+    </p>
+</section>
+<section>
+    <h2>Problem Statement</h2>
+    <p>This analysis was done for an open source project called Velero. The maintainers spend
+        a unscientific "good amount of time" every week answering questions from the community in Slack. The initial
+        goal for this analysis is to see if there are any FAQ's that can be discerned
         from the message data. The resultant FAQ's could be referenced by the community members who are answering
         questions
         as a quick way to share information without repeating the same answer many times. It is hypothesized this could
@@ -23,11 +33,14 @@
 
 <section>
     <h2>Community Impact</h2>
-    <p>Creating a FAQ document would help improve consistency in support messaging, ensuring that similar questions
-        are answered with similar guidance. Additionally, if engineers working on the team spend less time answering
-        common questions, they could spend more time and give more consideration to investigating unfamiliar problems
-        posed by users.
-    </p>
+    <p>
+        Creating a FAQ document would help improve consistency in support messaging, ensuring that similar questions
+        are answered with similar guidance. This would help minimize any confusion in the community as to how to use and troubleshoot the product,
+        ultimately getting more users up and running with Velero faster.<br><br>
+         Additionally, if maintainers working on the team spend less time answering
+        common questions, they could spend more time and give more consideration to investigating unfamiliar and unique problems
+        posed by users. That saved time is also time that could be spent adding new features or reviewing pull requests from the community.
+          </p>
 </section>
 <section>
     <h2>Data Preparation</h2>
@@ -55,7 +68,7 @@
         All occurrences of "http" or "https" were removed. The rest of the url string was left in the text because users
         sending messages and referencing the same link (possibly a user document) might be talking about the same thing
         so urls could provide a useful signal.<br>
-        All user tags were removed. In slack you can "mention" another user in your message. Though user tags may convey
+        All user tags were removed. In Slack you can "mention" another user in your message. Though user tags may convey
         some signal, they were removed to start. <br>
         All punctuation was removed. <br>
     </p>
@@ -543,7 +556,7 @@
         </pre>
     </figure>
     <figure>
-        <img class="fiftypctwidth horizontal-center" src="/images/slacktsne.png" alt="TSNE of kmeans clustering">
+        <img class="fiftypctwidth horizontal-center" src="/images/Slacktsne.png" alt="TSNE of kmeans clustering">
         <figcaption class="horizontal-center fiftypctwidth">TSNE Plot of Kmeans using k=20 and TF/IDF with ngrams 1-2
         </figcaption>
     </figure>
@@ -583,8 +596,8 @@
     </figure>
     <figure>
         <img class="fiftypctwidth horizontal-center" src="/images/pca.png"
-             alt="PCA plot for slack data">
-        <figcaption class="horizontal-center fiftypctwidth">PCA plot for slack data
+             alt="PCA plot for Slack data">
+        <figcaption class="horizontal-center fiftypctwidth">PCA plot for Slack data
         </figcaption>
     </figure>
     <h4>
@@ -858,9 +871,9 @@
     <h2>Conclusions</h2>
     <p>Since none of our analysis showed any signs that there were any useful clusterings of messages, no further
         analysis
-        into clustering was pursued. The team decided that as far as slack message analytics go, the next route to
+        into clustering was pursued. The team decided that as far as Slack message analytics go, the next route to
         pursue
-        may be a more metrics based analysis. For instance, displaying the most popular words in slack over a five day
+        may be a more metrics based analysis. For instance, displaying the most popular words in Slack over a five day
         window,
         or counting the number of unique users asking questions over a few day window. These metrics could further the
         team's
